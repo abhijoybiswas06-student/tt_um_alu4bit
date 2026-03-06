@@ -22,6 +22,26 @@ module tt_um_example (
   assign uio_oe  = 0;
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, clk, rst_n, 1'b0};
+    wire _unused = &{ena,ulo_ln[2],ulo_ln[3],ulo_ln[4],ulo_ln[5],ulo_ln[6],ulo_ln[7], 1'b0};
 
+    //ALU Logic
+    reg[3:0] result;
+    wire[3:0] a,b;
+    assign a = ui_in[3:0];
+    assign b= ui_in[7:4];
+    wire [1:0] op;
+    assign op = ui0_in[1:0];
+
+    always @(posedge clk)begin 
+    if(!rst_n)
+        result<=0;
+    else
+        case(op)
+            2'b00: result <= a+b;
+            2'b01: result <= a-b;
+            2'b10: result <= a & b;
+            2'b11: result <= a | b;
+        endcase
+    end 
+    assign uo out = result;
 endmodule
